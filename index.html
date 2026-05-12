@@ -2359,6 +2359,20 @@
             const navItems = $$('.nav-item');
             const pages = $$('.page');
             const topbarCurrent = $('#topbarCurrent');
+            const hamburger = $('#hamburger');
+            const overlay = $('#navOverlay');
+
+            function openNav() {
+                body.classList.add('nav-open', 'no-scroll');
+                if (hamburger) hamburger.setAttribute('aria-expanded', 'true');
+            }
+            function closeNav() {
+                body.classList.remove('nav-open', 'no-scroll');
+                if (hamburger) hamburger.setAttribute('aria-expanded', 'false');
+            }
+            function toggleNav() {
+                if (body.classList.contains('nav-open')) closeNav(); else openNav();
+            }
 
             function showPage(id, push) {
                 const page = document.getElementById('page-' + id);
@@ -2440,23 +2454,8 @@
                 });
             });
 
-            const hamburger = $('#hamburger');
-            const overlay = $('#navOverlay');
-
-            function openNav() {
-                body.classList.add('nav-open', 'no-scroll');
-                hamburger.setAttribute('aria-expanded', 'true');
-            }
-            function closeNav() {
-                body.classList.remove('nav-open', 'no-scroll');
-                hamburger.setAttribute('aria-expanded', 'false');
-            }
-            function toggleNav() {
-                if (body.classList.contains('nav-open')) closeNav(); else openNav();
-            }
-
-            hamburger.addEventListener('click', toggleNav);
-            overlay.addEventListener('click', closeNav);
+            if (hamburger) hamburger.addEventListener('click', toggleNav);
+            if (overlay) overlay.addEventListener('click', closeNav);
 
             let resizeTimer;
             window.addEventListener('resize', () => {
