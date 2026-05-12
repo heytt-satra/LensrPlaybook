@@ -1,0 +1,2558 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#0f0e0c">
+    <title>Lensr Sales Playbook</title>
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'%3E%3Crect width='400' height='400' rx='88' fill='%230f0e0c'/%3E%3Ccircle cx='200' cy='200' r='168' fill='%23F5C200'/%3E%3Ccircle cx='200' cy='200' r='146' fill='%231a1a1a'/%3E%3Ccircle cx='200' cy='200' r='120' fill='%23050508'/%3E%3Ccircle cx='200' cy='200' r='26' fill='%23F5C200' opacity='0.85'/%3E%3Ccircle cx='200' cy='200' r='16' fill='%230a0a0f'/%3E%3Ccircle cx='200' cy='200' r='6' fill='%23F5C200'/%3E%3Ccircle cx='138' cy='130' r='6' fill='%23fff'/%3E%3C/svg%3E">
+    <style>
+        :root {
+            --brand: #F5C200;
+            --brand-bright: #FFD94A;
+            --brand-dark: #C49800;
+            --brand-deep: #856100;
+            --brand-soft: #fff4d4;
+            --brand-tint: #fef3c7;
+
+            --bg: #f7f4ec;
+            --card: #fff;
+            --border: #e8e2d4;
+            --hl: #faf5e6;
+
+            --dark: #0f0e0c;
+            --dark-2: #1a1813;
+            --dark-3: #26231c;
+
+            --text: #0f0e0c;
+            --muted: #6b6258;
+            --muted-2: #a39d8f;
+
+            --sidebar-w: 250px;
+            --topbar-h: 56px;
+            --safe-bottom: env(safe-area-inset-bottom, 0px);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        .svg-defs {
+            position: absolute;
+            width: 0;
+            height: 0;
+            overflow: hidden;
+        }
+
+        .logo-svg {
+            display: block;
+            flex-shrink: 0;
+        }
+
+        .topbar {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--topbar-h);
+            background: rgba(15, 14, 12, 0.96);
+            backdrop-filter: saturate(180%) blur(14px);
+            -webkit-backdrop-filter: saturate(180%) blur(14px);
+            border-bottom: 0.5px solid rgba(245, 194, 0, 0.18);
+            z-index: 200;
+            align-items: center;
+            padding: 0 0.75rem;
+            gap: 0.5rem;
+            color: #fff;
+        }
+
+        .hamburger {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border-radius: 8px;
+            color: var(--brand);
+        }
+
+        .hamburger:active {
+            background: rgba(245, 194, 0, 0.08);
+        }
+
+        .hamburger span {
+            display: block;
+            width: 18px;
+            height: 1.5px;
+            background: currentColor;
+            position: relative;
+            transition: 0.25s;
+        }
+
+        .hamburger span::before,
+        .hamburger span::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            width: 18px;
+            height: 1.5px;
+            background: currentColor;
+            transition: 0.25s;
+        }
+
+        .hamburger span::before {
+            top: -5px;
+        }
+
+        .hamburger span::after {
+            top: 5px;
+        }
+
+        body.nav-open .hamburger span {
+            background: transparent;
+        }
+
+        body.nav-open .hamburger span::before {
+            top: 0;
+            transform: rotate(45deg);
+        }
+
+        body.nav-open .hamburger span::after {
+            top: 0;
+            transform: rotate(-45deg);
+        }
+
+        .topbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .topbar-logo {
+            width: 30px;
+            height: 30px;
+            border-radius: 7px;
+        }
+
+        .topbar-text {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .topbar-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+            line-height: 1.2;
+        }
+
+        .topbar-current {
+            font-size: 11px;
+            color: var(--brand);
+            font-weight: 500;
+            line-height: 1.2;
+            margin-top: 2px;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: var(--sidebar-w);
+            height: 100vh;
+            background: var(--dark);
+            color: rgba(255, 255, 255, 0.85);
+            border-right: 0.5px solid rgba(245, 194, 0, 0.12);
+            overflow-y: auto;
+            padding: 0 0 calc(1.25rem + var(--safe-bottom));
+            z-index: 150;
+            transition: transform 0.28s cubic-bezier(.4, 0, .2, 1);
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 1.1rem 1.25rem;
+            border-bottom: 0.5px solid rgba(255, 255, 255, 0.06);
+            background: linear-gradient(180deg, rgba(245, 194, 0, 0.03), transparent);
+        }
+
+        .sidebar-logo {
+            width: 38px;
+            height: 38px;
+            border-radius: 9px;
+            box-shadow: 0 4px 14px rgba(245, 194, 0, 0.15);
+        }
+
+        .sidebar-text {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+        }
+
+        .sidebar-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+            letter-spacing: -0.01em;
+        }
+
+        .sidebar-sub {
+            font-size: 10.5px;
+            color: var(--brand);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .search-wrap {
+            padding: 0.75rem 1rem 0.5rem;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            font-family: inherit;
+            font-size: 12.5px;
+            padding: 8px 10px 8px 30px;
+            border: 0.5px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.04);
+            color: #fff;
+            outline: none;
+            transition: border-color 0.15s, background 0.15s;
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.35);
+        }
+
+        .search-input:focus {
+            border-color: var(--brand);
+            background: rgba(245, 194, 0, 0.06);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1.7rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 13px;
+            height: 13px;
+            color: rgba(255, 255, 255, 0.4);
+            pointer-events: none;
+        }
+
+        .search-clear {
+            position: absolute;
+            right: 1.4rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            color: var(--dark);
+            border: none;
+            font-size: 11px;
+            line-height: 1;
+            cursor: pointer;
+            font-weight: 700;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .search-input:not(:placeholder-shown)+.search-clear {
+            display: flex;
+        }
+
+        .nav-section {
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--brand);
+            opacity: 0.55;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 0.95rem 1.25rem 0.4rem;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 0.55rem 1.25rem;
+            cursor: pointer;
+            border-left: 2px solid transparent;
+            text-decoration: none;
+            user-select: none;
+            transition: color 0.15s, background 0.15s;
+        }
+
+        .nav-item:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .nav-item.active {
+            color: #fff;
+            font-weight: 600;
+            border-left-color: var(--brand);
+            background: rgba(245, 194, 0, 0.08);
+        }
+
+        .nav-item .dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.25);
+            flex-shrink: 0;
+        }
+
+        .nav-item.active .dot {
+            background: var(--brand);
+            box-shadow: 0 0 8px var(--brand);
+        }
+
+        .nav-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.55);
+            z-index: 140;
+            opacity: 0;
+            transition: opacity 0.25s;
+        }
+
+        body.nav-open .nav-overlay {
+            display: block;
+            opacity: 1;
+        }
+
+        .main {
+            margin-left: var(--sidebar-w);
+            padding: 2rem 2.5rem 4rem;
+            max-width: 940px;
+        }
+
+        .page {
+            display: none;
+            animation: fadeIn 0.28s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(4px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: 26px;
+            font-weight: 500;
+            margin-bottom: 0.4rem;
+            letter-spacing: -0.015em;
+        }
+
+        .page-sub {
+            font-size: 13.5px;
+            color: var(--muted);
+            margin-bottom: 1.75rem;
+            line-height: 1.65;
+        }
+
+        .card {
+            background: var(--card);
+            border: 0.5px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            transition: border-color 0.15s;
+        }
+
+        .card:hover {
+            border-color: #d8d0bc;
+        }
+
+        .card-hdr {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .card-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--muted);
+        }
+
+        .copy-btn {
+            font-size: 11px;
+            padding: 5px 12px;
+            border-radius: 8px;
+            border: 0.5px solid var(--border);
+            background: transparent;
+            color: var(--muted);
+            cursor: pointer;
+            font-family: inherit;
+            min-height: 30px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.15s;
+            font-weight: 500;
+        }
+
+        .copy-btn:hover {
+            background: var(--brand-tint);
+            color: var(--brand-deep);
+            border-color: var(--brand);
+        }
+
+        .copy-btn:active {
+            transform: scale(0.97);
+        }
+
+        .copy-btn.copied {
+            background: var(--brand);
+            color: var(--dark);
+            border-color: var(--brand);
+        }
+
+        .subj-label {
+            font-size: 11px;
+            color: var(--muted-2);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 4px;
+        }
+
+        .subj-val {
+            font-size: 14px;
+            font-weight: 500;
+            padding-bottom: 11px;
+            margin-bottom: 12px;
+            border-bottom: 0.5px solid var(--border);
+        }
+
+        .msg {
+            font-size: 13.5px;
+            line-height: 1.85;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .ann {
+            background: #faf6ec;
+            border-radius: 8px;
+            padding: 10px 14px;
+            margin-top: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+            border: 0.5px solid #efe7d2;
+        }
+
+        .ar {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .atag {
+            font-size: 10px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 20px;
+            white-space: nowrap;
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+
+        .t-offers {
+            background: var(--brand-tint);
+            color: var(--brand-deep);
+        }
+
+        .t-leads {
+            background: #e9f3df;
+            color: #4d6b1f;
+        }
+
+        .t-both {
+            background: #f0e6d6;
+            color: #6b4f1f;
+        }
+
+        .atext {
+            font-size: 12px;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 6px;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            margin: 0 -2.5rem 1rem;
+            padding: 0 2.5rem 4px;
+            scroll-snap-type: x proximity;
+        }
+
+        .tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tbtab {
+            padding: 7px 14px;
+            border-radius: 20px;
+            border: 0.5px solid var(--border);
+            font-size: 12.5px;
+            cursor: pointer;
+            background: var(--card);
+            color: var(--muted);
+            font-family: inherit;
+            white-space: nowrap;
+            flex-shrink: 0;
+            scroll-snap-align: start;
+            transition: all 0.15s;
+            min-height: 32px;
+            font-weight: 500;
+        }
+
+        .tbtab:hover {
+            color: var(--text);
+            border-color: var(--brand-dark);
+        }
+
+        .tbtab.active {
+            background: var(--dark);
+            color: var(--brand);
+            border-color: var(--dark);
+            font-weight: 600;
+        }
+
+        .pane {
+            display: none;
+            animation: fadeIn 0.22s ease;
+        }
+
+        .pane.active {
+            display: block;
+        }
+
+        .section-lbl {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--brand-dark);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin: 1.5rem 0 0.6rem;
+        }
+
+        /* Objection accordions — using <details> for native, bulletproof toggle */
+        .objection-card {
+            background: var(--card);
+            border: 0.5px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 0.75rem;
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+
+        .objection-card[open] {
+            border-color: var(--brand-dark);
+            box-shadow: 0 4px 20px rgba(245, 194, 0, 0.08);
+        }
+
+        .objection-card>summary {
+            background: var(--brand-tint);
+            padding: 14px 18px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--brand-deep);
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            user-select: none;
+            transition: background 0.15s;
+        }
+
+        .objection-card>summary:hover {
+            background: var(--brand-soft);
+        }
+
+        .objection-card>summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .objection-card>summary::marker {
+            content: '';
+        }
+
+        .obj-chev {
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+            transition: transform 0.25s ease;
+            color: var(--brand-deep);
+        }
+
+        .objection-card[open]>summary {
+            background: var(--brand-soft);
+        }
+
+        .objection-card[open] .obj-chev {
+            transform: rotate(180deg);
+        }
+
+        .obj-a {
+            padding: 16px 18px 4px;
+            font-size: 13.5px;
+            line-height: 1.8;
+            white-space: pre-wrap;
+        }
+
+        .obj-why {
+            padding: 0 18px 16px;
+            font-size: 12px;
+            color: var(--muted);
+            font-style: italic;
+            line-height: 1.55;
+        }
+
+        .offer-block {
+            background: var(--card);
+            border: 0.5px solid var(--border);
+            border-radius: 12px;
+            padding: 1.4rem;
+            margin-bottom: 1rem;
+            position: relative;
+            transition: border-color 0.15s;
+        }
+
+        .offer-block::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--brand) 0%, var(--brand-bright) 100%);
+            border-radius: 12px 12px 0 0;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .offer-block:hover {
+            border-color: var(--brand-dark);
+        }
+
+        .offer-block:hover::before {
+            opacity: 1;
+        }
+
+        .offer-name {
+            font-size: 17px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            letter-spacing: -0.01em;
+        }
+
+        .offer-sub {
+            font-size: 13px;
+            color: var(--muted);
+            margin-bottom: 14px;
+            line-height: 1.5;
+        }
+
+        .offer-items {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .offer-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 13.5px;
+            line-height: 1.5;
+        }
+
+        .check {
+            color: var(--brand-dark);
+            font-weight: 700;
+            flex-shrink: 0;
+            margin-top: 1px;
+            font-size: 14px;
+        }
+
+        .price-badge {
+            display: inline-block;
+            font-size: 12.5px;
+            font-weight: 600;
+            padding: 5px 12px;
+            border-radius: 20px;
+            background: var(--dark);
+            color: var(--brand);
+            margin-top: 14px;
+            letter-spacing: 0.01em;
+        }
+
+        .nego-step {
+            background: var(--card);
+            border: 0.5px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+            transition: border-color 0.15s;
+        }
+
+        .nego-step:hover {
+            border-color: var(--brand-dark);
+        }
+
+        .step-num {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--dark);
+            color: var(--brand);
+            font-size: 13px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            border: 1.5px solid var(--brand);
+        }
+
+        .step-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .step-title {
+            font-size: 14.5px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .step-body {
+            font-size: 13.5px;
+            color: #333;
+            line-height: 1.7;
+        }
+
+        .step-script {
+            background: var(--hl);
+            border-radius: 8px;
+            padding: 12px 14px;
+            margin-top: 10px;
+            font-size: 13px;
+            line-height: 1.7;
+            font-style: italic;
+            word-wrap: break-word;
+            border-left: 3px solid var(--brand);
+            white-space: pre-wrap;
+        }
+
+        .call-section {
+            margin-bottom: 1rem;
+        }
+
+        .call-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--brand-dark);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 6px;
+        }
+
+        .call-block {
+            background: var(--card);
+            border: 0.5px solid var(--border);
+            border-left: 3px solid var(--brand);
+            border-radius: 10px;
+            padding: 14px 16px;
+            font-size: 13.5px;
+            line-height: 1.8;
+            white-space: pre-wrap;
+        }
+
+        .grand-slam {
+            background: linear-gradient(135deg, var(--dark) 0%, #1a1813 100%);
+            border: 0.5px solid var(--brand-dark);
+            border-radius: 14px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: rgba(255, 255, 255, 0.92);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .grand-slam::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(245, 194, 0, 0.18) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .gs-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--brand);
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .gs-title::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--brand);
+            box-shadow: 0 0 10px var(--brand);
+        }
+
+        .gs-eq {
+            font-size: 13.5px;
+            line-height: 1.9;
+            position: relative;
+        }
+
+        .gs-eq strong {
+            color: var(--brand-bright);
+            font-weight: 600;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: calc(20px + var(--safe-bottom));
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: var(--dark);
+            color: var(--brand);
+            padding: 10px 20px;
+            border-radius: 24px;
+            font-size: 13px;
+            font-weight: 600;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.25s ease;
+            z-index: 300;
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
+            border: 0.5px solid var(--brand);
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .fab {
+            position: fixed;
+            bottom: calc(20px + var(--safe-bottom));
+            right: 20px;
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: var(--dark);
+            color: var(--brand);
+            border: 1.5px solid var(--brand);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.85);
+            transition: all 0.2s;
+            z-index: 90;
+        }
+
+        .fab.show {
+            opacity: 1;
+            pointer-events: auto;
+            transform: scale(1);
+        }
+
+        .fab:active {
+            transform: scale(0.92);
+        }
+
+        .nav-item.hidden {
+            display: none;
+        }
+
+        .nav-section.hidden {
+            display: none;
+        }
+
+        @media (max-width: 900px) {
+            .main {
+                padding: 1.75rem 2rem 4rem;
+            }
+
+            .tabs {
+                margin: 0 -2rem 1rem;
+                padding: 0 2rem 4px;
+            }
+        }
+
+        @media (max-width: 720px) {
+            .topbar {
+                display: flex;
+            }
+
+            body.no-scroll {
+                overflow: hidden;
+            }
+
+            .sidebar {
+                width: min(290px, 86vw);
+                transform: translateX(-100%);
+                box-shadow: 4px 0 28px rgba(0, 0, 0, 0.3);
+            }
+
+            body.nav-open .sidebar {
+                transform: translateX(0);
+            }
+
+            .main {
+                margin-left: 0;
+                padding: calc(var(--topbar-h) + 1rem) 1rem calc(5rem + var(--safe-bottom));
+            }
+
+            h1 {
+                font-size: 22px;
+            }
+
+            .page-sub {
+                font-size: 13px;
+                margin-bottom: 1.25rem;
+            }
+
+            .card {
+                padding: 1rem;
+                border-radius: 10px;
+            }
+
+            .offer-block {
+                padding: 1rem;
+            }
+
+            .nego-step {
+                padding: 1rem;
+                gap: 10px;
+            }
+
+            .grand-slam {
+                padding: 1.1rem;
+            }
+
+            .tabs {
+                margin: 0 -1rem 1rem;
+                padding: 0 1rem 4px;
+            }
+
+            .card-hdr {
+                flex-wrap: wrap;
+            }
+
+            .msg {
+                font-size: 14px;
+            }
+
+            .step-script {
+                font-size: 13px;
+            }
+
+            .objection-card>summary {
+                font-size: 13.5px;
+                padding: 13px 14px;
+            }
+
+            .obj-a {
+                font-size: 13px;
+                padding: 14px 14px 4px;
+            }
+
+            .fab {
+                bottom: calc(16px + var(--safe-bottom));
+                right: 16px;
+                width: 42px;
+                height: 42px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .main {
+                padding: calc(var(--topbar-h) + 0.75rem) 0.75rem calc(5rem + var(--safe-bottom));
+            }
+
+            .card,
+            .offer-block,
+            .nego-step,
+            .grand-slam {
+                padding: 0.9rem;
+            }
+
+            .step-num {
+                width: 26px;
+                height: 26px;
+                font-size: 12px;
+            }
+        }
+
+        .no-results {
+            display: none;
+            text-align: center;
+            padding: 1.5rem 1rem;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 12.5px;
+        }
+
+        body.search-empty .no-results {
+            display: block;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+
+            html {
+                scroll-behavior: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <svg class="svg-defs" aria-hidden="true" focusable="false">
+        <defs>
+            <radialGradient id="lr-barrel" cx="50%" cy="30%" r="70%">
+                <stop offset="0%" stop-color="#FFD94A" />
+                <stop offset="60%" stop-color="#F5C200" />
+                <stop offset="100%" stop-color="#C49800" />
+            </radialGradient>
+            <radialGradient id="lr-housing" cx="50%" cy="30%" r="70%">
+                <stop offset="0%" stop-color="#3a3a3a" />
+                <stop offset="100%" stop-color="#111" />
+            </radialGradient>
+            <radialGradient id="lr-glass" cx="42%" cy="36%" r="70%">
+                <stop offset="0%" stop-color="#1a1a2e" />
+                <stop offset="40%" stop-color="#0d0d18" />
+                <stop offset="100%" stop-color="#050508" />
+            </radialGradient>
+            <radialGradient id="lr-pupil" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#F5C200" stop-opacity="0.9" />
+                <stop offset="100%" stop-color="#C49800" stop-opacity="0.6" />
+            </radialGradient>
+            <radialGradient id="lr-glint" cx="36%" cy="30%" r="65%">
+                <stop offset="0%" stop-color="#fff" stop-opacity="0.18" />
+                <stop offset="100%" stop-color="#fff" stop-opacity="0" />
+            </radialGradient>
+            <symbol id="lensr-logo" viewBox="0 0 400 400">
+                <rect width="400" height="400" rx="88" fill="#0f0e0c" />
+                <circle cx="200" cy="200" r="168" fill="url(#lr-barrel)" />
+                <circle cx="200" cy="200" r="152" fill="#0f0e0c" />
+                <circle cx="200" cy="200" r="146" fill="url(#lr-housing)" />
+                <circle cx="200" cy="200" r="136" fill="#0f0e0c" />
+                <circle cx="200" cy="200" r="130" fill="#1a1a1a" />
+                <circle cx="200" cy="200" r="126" fill="#0f0e0c" />
+                <circle cx="200" cy="200" r="120" fill="url(#lr-glass)" />
+                <circle cx="200" cy="200" r="108" fill="none" stroke="#F5C200" stroke-width="0.6" opacity="0.15" />
+                <circle cx="200" cy="200" r="74" fill="none" stroke="#F5C200" stroke-width="0.5" opacity="0.1" />
+                <circle cx="200" cy="200" r="44" fill="#08080f" />
+                <circle cx="200" cy="200" r="40" fill="none" stroke="#F5C200" stroke-width="0.8" opacity="0.25" />
+                <circle cx="200" cy="200" r="26" fill="url(#lr-pupil)" />
+                <circle cx="200" cy="200" r="16" fill="#0a0a0f" />
+                <circle cx="200" cy="200" r="6" fill="#F5C200" opacity="0.85" />
+                <ellipse cx="155" cy="148" rx="42" ry="20" fill="#fff" opacity="0.07" transform="rotate(-38 155 148)" />
+                <ellipse cx="150" cy="143" rx="26" ry="10" fill="#fff" opacity="0.2" transform="rotate(-38 150 143)" />
+                <ellipse cx="144" cy="137" rx="14" ry="5" fill="#fff" opacity="0.6" transform="rotate(-38 144 137)" />
+                <circle cx="138" cy="130" r="5.5" fill="#fff" />
+                <circle cx="152" cy="120" r="2.5" fill="#fff" opacity="0.5" />
+                <circle cx="200" cy="200" r="120" fill="url(#lr-glint)" />
+            </symbol>
+        </defs>
+    </svg>
+
+    <header class="topbar">
+        <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
+            <span></span>
+        </button>
+        <div class="topbar-brand">
+            <svg class="logo-svg topbar-logo" viewBox="0 0 400 400" aria-hidden="true">
+                <use href="#lensr-logo" />
+            </svg>
+            <div class="topbar-text">
+                <div class="topbar-title">Lensr</div>
+                <div class="topbar-current" id="topbarCurrent">Grand Slam Offer</div>
+            </div>
+        </div>
+    </header>
+
+    <div class="nav-overlay" id="navOverlay"></div>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <svg class="logo-svg sidebar-logo" viewBox="0 0 400 400" aria-hidden="true">
+                <use href="#lensr-logo" />
+            </svg>
+            <div class="sidebar-text">
+                <div class="sidebar-title">Lensr</div>
+                <div class="sidebar-sub">Sales Playbook</div>
+            </div>
+        </div>
+
+        <div class="search-wrap">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <circle cx="11" cy="11" r="7" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            <input type="search" id="searchInput" class="search-input" placeholder="Search playbook..."
+                aria-label="Search" autocomplete="off">
+            <button class="search-clear" id="searchClear" aria-label="Clear search">&times;</button>
+        </div>
+
+        <div class="nav-section">Outreach</div>
+        <a class="nav-item active" data-page="offer" href="#offer"><span class="dot"></span>Grand Slam Offer</a>
+        <a class="nav-item" data-page="email" href="#email"><span class="dot"></span>Cold email</a>
+        <a class="nav-item" data-page="followup" href="#followup"><span class="dot"></span>Follow-up email</a>
+        <a class="nav-item" data-page="li" href="#li"><span class="dot"></span>LinkedIn</a>
+        <a class="nav-item" data-page="insta" href="#insta"><span class="dot"></span>Instagram DM</a>
+        <div class="nav-section">Sales</div>
+        <a class="nav-item" data-page="coldcall" href="#coldcall"><span class="dot"></span>Cold call script</a>
+        <a class="nav-item" data-page="objections" href="#objections"><span class="dot"></span>Objection handling</a>
+        <a class="nav-item" data-page="nego" href="#nego"><span class="dot"></span>Negotiation tactics</a>
+
+        <div class="no-results">No matches found.</div>
+    </aside>
+
+    <main class="main" id="mainContent">
+
+        <!-- GRAND SLAM OFFER -->
+        <div class="page active" id="page-offer" data-title="Grand Slam Offer">
+            <h1>Lensr grand slam offer</h1>
+            <p class="page-sub">Built from $100M Offers value equation: Dream Outcome x Perceived Likelihood / Effort x
+                Time Delay. Every package below is structured to maximise the top and minimise the bottom of that
+                equation.</p>
+
+            <div class="grand-slam">
+                <div class="gs-title">The value equation applied to Lensr</div>
+                <div class="gs-eq">
+                    <strong>Dream outcome:</strong> A shoot that runs perfectly with zero vendor coordination,
+                    cinema-quality output, on time, every time.<br>
+                    <strong>Perceived likelihood:</strong> BFC official partner. BeerBiceps Season 1. BTDT x Snitch. The
+                    Founder and The Funder every episode. NLEY Consultants ongoing. Old Monk VFX Studio recurring.<br>
+                    <strong>Effort and sacrifice removed:</strong> One call. One invoice. Everything confirmed.<br>
+                    <strong>Time delay removed:</strong> 24/7 availability. Short notice is normal.
+                </div>
+            </div>
+
+            <div class="section-lbl">Core packages</div>
+
+            <div class="offer-block">
+                <div class="offer-name">Day shoot package</div>
+                <div class="offer-sub">For agencies, brands, and founders doing a single shoot day. Everything from one
+                    booking.</div>
+                <div class="offer-items">
+                    <div class="offer-item"><span class="check">+</span> Sony FX camera body (FX9, FX6, or FX3 based on
+                        brief)</div>
+                    <div class="offer-item"><span class="check">+</span> Lens kit (anamorphic or spherical based on
+                        look)</div>
+                    <div class="offer-item"><span class="check">+</span> Gimbal stabiliser</div>
+                    <div class="offer-item"><span class="check">+</span> Full audio: boom and wireless</div>
+                    <div class="offer-item"><span class="check">+</span> Professional lighting rig</div>
+                    <div class="offer-item"><span class="check">+</span> DOP or camera operator (wet hire option)</div>
+                    <div class="offer-item"><span class="check">+</span> On-location, confirmed, 24/7 availability</div>
+                </div>
+                <div class="price-badge">Day rate from the rate card</div>
+            </div>
+
+            <div class="offer-block">
+                <div class="offer-name">Full production package</div>
+                <div class="offer-sub">For brand films, podcast productions, corporate shoots, and multi-camera setups.
+                    The complete stack.</div>
+                <div class="offer-items">
+                    <div class="offer-item"><span class="check">+</span> Multi-camera setup (FX9 + FX6 or FX3)</div>
+                    <div class="offer-item"><span class="check">+</span> Cooke SP3 anamorphic lenses</div>
+                    <div class="offer-item"><span class="check">+</span> CMotion follow focus</div>
+                    <div class="offer-item"><span class="check">+</span> Gimbal and drone with licensed pilot</div>
+                    <div class="offer-item"><span class="check">+</span> Full audio: boom, wireless, mixer</div>
+                    <div class="offer-item"><span class="check">+</span> Teleprompter with operator</div>
+                    <div class="offer-item"><span class="check">+</span> Full lighting rig</div>
+                    <div class="offer-item"><span class="check">+</span> DOP, camera operator, gimbal operator</div>
+                    <div class="offer-item"><span class="check">+</span> One invoice, one point of contact</div>
+                </div>
+                <div class="price-badge">Custom quote based on brief</div>
+            </div>
+
+            <div class="offer-block">
+                <div class="offer-name">Monthly retainer package</div>
+                <div class="offer-sub">For digital agencies, F&B brands, corporate teams, and anyone doing more than two
+                    shoot days per month. Fixed cost. Guaranteed availability. No per-shoot scramble.</div>
+                <div class="offer-items">
+                    <div class="offer-item"><span class="check">+</span> Defined number of shoot days per month</div>
+                    <div class="offer-item"><span class="check">+</span> Full gear and crew for each shoot day</div>
+                    <div class="offer-item"><span class="check">+</span> Priority booking, no availability risk</div>
+                    <div class="offer-item"><span class="check">+</span> Fixed monthly cost, predictable budgets</div>
+                    <div class="offer-item"><span class="check">+</span> Consistent gear and crew type every shoot</div>
+                    <div class="offer-item"><span class="check">+</span> Rollover shoot days if needed</div>
+                </div>
+                <div class="price-badge">Monthly fixed rate, custom to frequency</div>
+            </div>
+
+            <div class="offer-block">
+                <div class="offer-name">Dry hire package</div>
+                <div class="offer-sub">For production houses, VFX studios, and teams with their own crew. Gear only, no
+                    crew. Recurring supplier for Old Monk VFX Studio.</div>
+                <div class="offer-items">
+                    <div class="offer-item"><span class="check">+</span> Any gear from the full Lensr kit list</div>
+                    <div class="offer-item"><span class="check">+</span> Available 24/7, short notice</div>
+                    <div class="offer-item"><span class="check">+</span> Delivery or pickup</div>
+                    <div class="offer-item"><span class="check">+</span> No crew supplied</div>
+                </div>
+                <div class="price-badge">Day rate per item from the rate card</div>
+            </div>
+
+            <div class="section-lbl">The grand slam guarantee</div>
+            <div class="card">
+                <div class="msg">Hormozi principle: "Guarantees allow customers to try your stuff risk-free."
+
+                    Lensr guarantee framing (use this verbally and in proposals):
+
+                    "If we show up and anything in the kit is not what was confirmed, we replace it on the same day at
+                    no additional cost. If we cannot, you do not pay for that item. Simple."
+
+                    This removes the biggest fear any client has: paying for gear that does not show up right. Most
+                    rental houses do not offer this. Stating it out loud closes more deals than any discount will.</div>
+            </div>
+        </div>
+
+        <!-- COLD EMAIL -->
+        <div class="page" id="page-email" data-title="Cold email">
+            <h1>Cold email templates</h1>
+            <p class="page-sub">Hook, retain, reward. Every email opens a loop, keeps them reading, and closes with a
+                low-friction CTA. No em dashes. Annotations show which Hormozi lever each section pulls.</p>
+
+            <div class="tabs" role="tablist">
+                <button class="tbtab active" data-pane="et1">General</button>
+                <button class="tbtab" data-pane="et2">Digital agency</button>
+                <button class="tbtab" data-pane="et3">Ad agency</button>
+                <button class="tbtab" data-pane="et4">D2C founder</button>
+                <button class="tbtab" data-pane="et5">Corporate</button>
+                <button class="tbtab" data-pane="et6">Creator</button>
+                <button class="tbtab" data-pane="et7">F&B</button>
+                <button class="tbtab" data-pane="et8">Luxury</button>
+            </div>
+
+            <div class="pane active" id="et1">
+                <div class="card">
+                    <div class="card-hdr"><span class="card-label">General cold email</span><button class="copy-btn"
+                            data-copy="ge1">Copy</button></div>
+                    <div class="subj-label">Subject</div>
+                    <div class="subj-val">Shoot day without the vendor chaos — Lensr, Mumbai</div>
+                    <div class="msg" id="ge1">Hi [First name],
+
+                        Most shoot days in Mumbai have a hidden tax nobody talks about.
+
+                        You booked a DOP from one contact. Gear from another. Audio from a third. By the time camera
+                        rolls, someone has burned 90 minutes they did not have chasing confirmations and tracking down a
+                        missing boom pole.
+
+                        The shoot still happens. But the team arrives frayed. And that cost never shows up on an
+                        invoice.
+
+                        That is the problem Lensr was built to remove.
+
+                        One booking: Sony FX cameras, anamorphic lenses, gimbals, drone, full audio, and crew. DOPs,
+                        camera operators, gimbal ops. Confirmed. On-location. Ready.
+
+                        We are the official production partner for Bombay Founders Club events, shot every episode of
+                        The Founder and The Funder podcast, handled the full first season of BeerBiceps, and supply gear
+                        for BTDT Media x Snitch shoot days.
+
+                        If you have a shoot in the next 30 days, reply and I will send what a full day package looks
+                        like. Two minutes to read. Zero commitment.
+
+                        [Your name]
+                        Lensr | lensr.in | 24/7</div>
+                    <div class="ann">
+                        <div class="ar"><span class="atag t-leads">Hook</span><span class="atext">Hidden tax nobody
+                                talks about. Opens a loop the reader needs to close.</span></div>
+                        <div class="ar"><span class="atag t-offers">Pain</span><span class="atext">90 minutes chasing
+                                confirmations. Specific. Not vague stress.</span></div>
+                        <div class="ar"><span class="atag t-both">Proof</span><span class="atext">Six named clients.
+                                Specificity is the currency of trust.</span></div>
+                        <div class="ar"><span class="atag t-leads">CTA</span><span class="atext">30 days window. Two
+                                minutes. Zero commitment. Risk collapsed to almost nothing.</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pane" id="et2">
+                <div class="card">
+                    <div class="card-hdr"><span class="card-label">Digital marketing agency</span><button
+                            class="copy-btn" data-copy="ge2">Copy</button></div>
+                    <div class="subj-label">Subject</div>
+                    <div class="subj-val">Your clients want more video. Your margins cannot handle another vendor.</div>
+                    <div class="msg" id="ge2">Hi [First name],
+
+                        Digital agencies are producing more video than ever. Brand shoots, reels, product content, event
+                        coverage. Clients want it all, fast and consistent.
+
+                        The problem: every shoot is a new production puzzle. Find a DOP. Source gear. Locate a gimbal
+                        operator. Someone on your team burns three hours on logistics the morning of the shoot.
+
+                        That friction is invisible to the client. It is not invisible to your margins.
+
+                        Lensr fixes that. One booking for gear and crew. Sony FX9, FX6, FX3. Cooke anamorphic lenses.
+                        Gimbals, drone, full audio. DOPs and camera operators included. One invoice. Everything
+                        confirmed.
+
+                        We are the official production partner for Bombay Founders Club events, shot every episode of
+                        The Founder and The Funder podcast, handled the full first season of BeerBiceps, and supplied
+                        the complete gear list for BTDT Media x Snitch shoot days. Agencies that shoot with us once stop
+                        rebuilding the vendor list every time.
+
+                        Monthly retainer packages available for agencies with regular shoot calendars.
+
+                        If your team shoots more than twice a month, reply with your typical frequency and I will put a
+                        package together specifically for you.
+
+                        [Your name]
+                        Lensr | lensr.in</div>
+                    <div class="ann">
+                        <div class="ar"><span class="atag t-leads">Subject</span><span class="atext">Two pains in one
+                                line. Client pressure and margin pressure. Either gets the open.</span></div>
+                        <div class="ar"><span class="atag t-offers">Dream outcome</span><span class="atext">Invisible to
+                                the client, not invisible to your margins. Names the real loss.</span></div>
+                        <div class="ar"><span class="atag t-leads">CTA</span><span class="atext">Reply with your typical
+                                frequency qualifies the buyer. Only agencies that shoot regularly will reply.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pane" id="et3">
+                <div class="card">
+                    <div class="card-hdr"><span class="card-label">Ad / creative agency</span><button class="copy-btn"
+                            data-copy="ge3">Copy</button></div>
+                    <div class="subj-label">Subject</div>
+                    <div class="subj-val">The shoot is confirmed. The DP just cancelled. Now what.</div>
+                    <div class="msg" id="ge3">Hi [First name],
+
+                        Ad productions do not get soft launches.
+
+                        A client campaign confirmed on Monday is on set by Wednesday. And when the DP falls through, the
+                        gimbal operator goes dark, or audio shows up without a mixer, the shoot still has to happen.
+
+                        Most rental houses need lead time, pre-booking, and clean timelines. That is not how ad
+                        production works.
+
+                        We run 24/7. Short notice is how we operate.
+
+                        Lensr: cinema-grade camera gear and production crew, Mumbai. Sony FX9, Cooke SP3 anamorphics,
+                        CMotion, gimbals, drone, full audio. DOPs, camera operators, gimbal ops. All vetted.
+
+                        We are the official production partner for Bombay Founders Club events, shot every episode of
+                        The Founder and The Funder podcast, handled the full first season of BeerBiceps, supplied the
+                        complete gear kit for BTDT Media x Snitch shoot days, and are the recurring gear supplier for
+                        Old Monk VFX Studio. High-stakes shoots with no room for vendor failure. That is our normal.
+
+                        If you want the full kit list and day rates now, before you need them, reply and I will send it
+                        over.
+
+                        [Your name]
+                        Lensr | lensr.in | 24/7</div>
+                    <div class="ann">
+                        <div class="ar"><span class="atag t-leads">Subject</span><span class="atext">Fear loop without a
+                                close. Every ad producer has lived this exact moment.</span></div>
+                        <div class="ar"><span class="atag t-offers">Category reframe</span><span class="atext">Most
+                                rental houses are not built for that. Positions every competitor as wrong without naming
+                                anyone.</span></div>
+                        <div class="ar"><span class="atag t-both">Old Monk VFX</span><span class="atext">VFX studio
+                                proof signals high technical demands and reliability under pressure. Most relevant for
+                                ad agencies.</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pane" id="et4">
+                <div class="card">
+                    <div class="card-hdr"><span class="card-label">D2C startup founder</span><button class="copy-btn"
+                            data-copy="ge4">Copy</button></div>
+                    <div class="subj-label">Subject</div>
+                    <div class="subj-val">Shoot-ready gear and crew for your next campaign</div>
+                    <div class="msg" id="ge4">Hi [First name],
+
+                        Most D2C founders hit the same wall post-funding. The marketing budget exists. The production
+                        pipeline does not.
+
+                        So they call a freelancer, rent gear from a shop that does not supply crew, and spend the week
+                        before the shoot stitching together a call sheet from three WhatsApp threads. That is the hidden
+                        cost nobody talks about when brands start scaling content.
+
+                        Lensr is the one call that replaces all of that.
+
+                        Sony FX cameras, anamorphic lenses, gimbals, drone, full audio, and crew. DOPs, camera
+                        operators, gimbal ops. One booking, one invoice.
+
+                        We are the official production partner for Bombay Founders Club events across Mumbai, Pune,
+                        Delhi, and Bengaluru, shot every episode of The Founder and The Funder podcast, handled the full
+                        first season of BeerBiceps, and supply the full gear list for BTDT Media x Snitch shoot days. If
+                        you are building a brand in Mumbai, you have likely already seen our work without knowing it.
+
+                        If you have a campaign, product shoot, or brand video in the next 30 days, reply and I will send
+                        a package breakdown. Two minutes to read. Zero commitment.
+
+                        [Your name]
+                        Lensr | lensr.in | 24/7</div>
+                    <div class="ann">
+                        <div class="ar"><span class="atag t-leads">Timing</span><span class="atext">Post-funding is the
+                                window where content urgency and budget finally meet. The hook targets that exact
+                                moment.</span></div>
+                        <div class="ar"><span class="atag t-offers">Three WhatsApp threads</span><span
+                                class="atext">Customer language. This is exactly how a founder describes shoot
+                                coordination to a friend. Recognition creates instant trust.</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pane" id="et5">
+                <div class="card">
+                    <div class="card-hdr"><span class="card-label">Corporate marketing head</span><button
+                            class="copy-btn" data-copy="ge5">Copy</button></div>
+                    <div class="subj-label">Subject</div>
+                    <div class="subj-val">Professional video for your team — without the agency markup</div>
+                    <div class="msg" id="ge5">Hi [First name],
+
+                        Corporate marketing teams in Mumbai are producing more video than ever. Brand films, investor
+                        updates, product launches, internal communications.
+
+                        The production side is where it breaks. You either pay agency rates that include overhead you
+                        did not ask for, or you source gear from a rental house and spend the rest of the week finding a
+                        DOP, a camera operator, and audio separately.
+
+                        Either way, someone on your team is spending hours on logistics instead of marketing.
+
+                        Lensr is the third option. Cinema-grade gear and crew, one booking. Sony FX cameras,
+                        teleprompter with operator, gimbals, drone, full audio. One vendor, one invoice, predictable
+                        cost.
+
+                        We handle production for Bombay Founders Club events across four cities, shot every episode of
+                        The Founder and The Funder podcast, managed the full first season of BeerBiceps, and run ongoing
+                        production for NLEY Consultants. Brands and organisations that need consistent, professional
+                        output on a regular schedule.
+
+                        If your team has a shoot in the next 30 days, reply and I will send a package breakdown with day
+                        rates. No obligation.
+
+                        [Your name]
+                        Lensr | lensr.in | 24/7</div>
+                    <div class="ann">
+                        <div class="ar"><span class="atag t-offers">Third option</span><span class="atext">Agency or DIY
+                                are both bad. Lensr is the door neither option offered. Hormozi: create a category of
+                                one.</span></div>
+                        <div class="ar"><span class="atag t-both">NLEY proof</span><span class="atext">Professional
+                                services firm ongoing production. Most relatable proof for a corporate marketing
+                                head.</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pane" id="et6">
+                <div class="card">
+                    <div class="card-hdr"><span class="card-label">Content creator</span><button class="copy-btn"
+                            data-copy="ge6">Copy</button></div>
+                    <div class="subj-label">Subject</div>
+                    <div class="subj-val">Your next brand deal deserves a better camera than what you shot the last one
+                        on</div>
+                    <div class="msg" id="ge6">Hi [First name],
+
+                        Brand deals at your level come with expectations. The client wants production value that matches
+                        the brief. And shot on a mirrorless does not always cut it anymore.
+
+                        The problem is you cannot justify buying a Sony FX9 for three shoots a month. Owning gear that
+                        depreciates between shoots is not a good use of a creator's money.
+
+                        That is what Lensr is for. Book the camera, lenses, gimbal, lighting, and audio for the shoot
+                        day. Operator included if you want one. Cinema-grade output. You pay for the day.
+
+                        We handled the full first season of BeerBiceps, supply gear for BTDT Media x Snitch shoot days,
+                        and have shot every episode of The Founder and The Funder podcast. Creators and brands in Mumbai
+                        who care about what the output looks like.
+
+                        If you have a brand shoot or content day coming up, reply and I will send what a day package
+                        looks like for your setup.
+
+                        [Your name]
+                        Lensr | lensr.in</div>
+                    <div class="ann">
+                        <div class="ar"><span class="atag t-leads">Hook</span><span class="atext">Aspirational, not
+                                critical. Implies they have outgrown their current gear. Creators respond to
+                                aspiration.</span></div>
+                        <div class="ar"><span class="atag t-offers">Ownership cost removed</span><span
+                                class="atext">Depreciates between shoots is the hidden cost every creator who has
+                                researched an FX9 has already thought about.</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pane" id="et7">
+                <div class="card">
+                    <div class="card-hdr"><span class="card-label">F&B brand</span><button class="copy-btn"
+                            data-copy="ge7">Copy</button></div>
+                    <div class="subj-label">Subject</div>
+                    <div class="subj-val">Food looks better on a Sony FX9 than on a phone. Here is why that matters.
+                    </div>
+                    <div class="msg" id="ge7">Hi [First name],
+
+                        F&B content lives or dies on how the food looks. A poorly lit phone video of your best dish
+                        tells the wrong story. A cinema camera with the right lens and lighting tells the right one.
+
+                        The challenge for most F&B brands is production consistency. Every campaign shoots differently.
+                        Different camera, different crew, different quality. The brand looks inconsistent because the
+                        production is inconsistent.
+
+                        Lensr fixes that. Same gear, same crew type, same output quality every time. Sony FX cameras,
+                        proper food and product lighting, gimbal for movement shots, full audio. Crew included. One
+                        invoice.
+
+                        We handled the full first season of BeerBiceps, handle all production for Bombay Founders Club
+                        events, and supply the complete gear kit for BTDT Media x Snitch shoot days. Brands that need
+                        the output to look right every time.
+
+                        Monthly retainer packages for brands doing regular shoot days. Fixed cost, scheduled shoots.
+
+                        Reply and I will put a package together based on your shoot frequency.
+
+                        [Your name]
+                        Lensr | lensr.in</div>
+                    <div class="ann">
+                        <div class="ar"><span class="atag t-offers">Consistency as the product</span><span
+                                class="atext">F&B brands do not just want one good shoot. They want the same quality
+                                every shoot. Name that and you win.</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pane" id="et8">
+                <div class="card">
+                    <div class="card-hdr"><span class="card-label">Luxury / jewellery brand</span><button
+                            class="copy-btn" data-copy="ge8">Copy</button></div>
+                    <div class="subj-label">Subject</div>
+                    <div class="subj-val">Jewellery and luxury content needs a different camera. Here is why.</div>
+                    <div class="msg" id="ge8">Hi [First name],
+
+                        Luxury and jewellery content lives in the detail. A stone's texture. The weight of a piece. The
+                        way light catches a setting. These things do not translate on a standard mirrorless with a kit
+                        lens.
+
+                        Cooke anamorphic lenses and a Sony FX9 tell a different story. Shallow depth of field. Cinematic
+                        rendering. The kind of visual quality that matches the price point of what you are selling.
+
+                        Lensr handles luxury product and brand shoots in Mumbai. Sony FX9 with Cooke SP3 anamorphic
+                        lenses. Macro setups for product detail. Professional lighting rig. Gimbal for campaign movement
+                        shots. Crew included.
+
+                        We are the official production partner for Bombay Founders Club events, shot every episode of
+                        The Founder and The Funder podcast, managed the full first season of BeerBiceps, supply gear for
+                        BTDT Media x Snitch shoot days, and are the recurring gear supplier for Old Monk VFX Studio.
+                        Brands that care about what the output looks like.
+
+                        If you have a campaign shoot, lookbook, or brand film coming up, reply and I will put a package
+                        together. Happy to share previous luxury and product work on request.
+
+                        [Your name]
+                        Lensr | lensr.in</div>
+                    <div class="ann">
+                        <div class="ar"><span class="atag t-leads">Sensory hook</span><span class="atext">The way light
+                                catches a setting is a visual the prospect immediately recognises from their own
+                                category. The hook is a picture, not a claim.</span></div>
+                        <div class="ar"><span class="atag t-offers">Price-point alignment</span><span
+                                class="atext">Visual quality that matches the price point ties the production investment
+                                to brand positioning. For luxury, this justifies premium spend.</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOLLOW UP -->
+        <div class="page" id="page-followup" data-title="Follow-up email">
+            <h1>Follow-up templates</h1>
+            <p class="page-sub">Hormozi: reach out up to three times. The follow-up is a second knock, not a second
+                pitch. Short. Direct. New angle or new offer element. No apology for following up.</p>
+
+            <div class="section-lbl">Follow-up 1 — Day 5 to 7, no reply</div>
+            <div class="card">
+                <div class="card-hdr"><span class="card-label">General follow-up 1</span><button class="copy-btn"
+                        data-copy="fu1">Copy</button></div>
+                <div class="subj-label">Subject</div>
+                <div class="subj-val">Re: [original subject]</div>
+                <div class="msg" id="fu1">Hi [First name],
+
+                    Following up in case my last message got buried.
+
+                    Short version: if your team has a shoot coming up and wants gear, crew, or both sorted without the
+                    vendor back-and-forth, that is exactly what we do. Short notice is fine.
+
+                    If timing is off, no problem. Worth keeping in your contacts for when it is not.
+
+                    [Your name]
+                    Lensr | lensr.in</div>
+                <div class="ann">
+                    <div class="ar"><span class="atag t-leads">Short on purpose</span><span class="atext">You already
+                            made the case. This is a second knock. Longer does not fix ignored. Shorter might.</span>
+                    </div>
+                    <div class="ar"><span class="atag t-offers">Exit ramp</span><span class="atext">Worth keeping in
+                            your contacts plants the future conversion seed. Not if. When.</span></div>
+                </div>
+            </div>
+
+            <div class="section-lbl">Follow-up 2 — Day 10 to 12, still no reply</div>
+            <div class="card">
+                <div class="card-hdr"><span class="card-label">General follow-up 2 (final touch)</span><button
+                        class="copy-btn" data-copy="fu2">Copy</button></div>
+                <div class="subj-label">Subject</div>
+                <div class="subj-val">Closing the loop — Lensr</div>
+                <div class="msg" id="fu2">Hi [First name],
+
+                    Last message from me on this.
+
+                    If a shoot ever comes up and you need gear, crew, or both sorted from one place without the usual
+                    chaos, that is what we do. 24/7, short notice included.
+
+                    Lensr | lensr.in — save it for when you need it.
+
+                    [Your name]</div>
+                <div class="ann">
+                    <div class="ar"><span class="atag t-leads">Closing the loop</span><span class="atext">Hormozi: three
+                            touches max. This one is confident, not desperate. You are telling them you are done
+                            following up, which often triggers a reply more than another pitch.</span></div>
+                </div>
+            </div>
+
+            <div class="section-lbl">Reply to "We have an in-house team"</div>
+            <div class="card">
+                <div class="card-hdr"><span class="card-label">In-house team objection reply</span><button
+                        class="copy-btn" data-copy="fu3">Copy</button></div>
+                <div class="msg" id="fu3">That is great, in-house teams are the best setup when shoots are frequent.
+
+                    Most teams we work with still reach out when a shoot needs gear they do not own, like a cinema lens
+                    set, a drone, or a gimbal rig for a specific brief. Or when two shoots run on the same day and
+                    capacity gets stretched.
+
+                    We are basically your overflow and upgrade option. Good to have in the contacts either way.
+
+                    Quick question: when a brief comes in that needs something your team does not carry, what is the
+                    current plan for that?</div>
+                <div class="ann">
+                    <div class="ar"><span class="atag t-offers">Agree and reframe</span><span class="atext">Never fight
+                            the objection. Validate it, then show the two scenarios where they still need you even with
+                            an in-house team.</span></div>
+                    <div class="ar"><span class="atag t-leads">Diagnostic question</span><span class="atext">Hormozi:
+                            ask questions that make the prospect think about their own gap. Their answer opens the door
+                            you need.</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LINKEDIN -->
+        <div class="page" id="page-li" data-title="LinkedIn">
+            <h1>LinkedIn templates</h1>
+            <p class="page-sub">Two separate jobs. The connection note gets the accept. The DM does the work. Never
+                collapse them into one message.</p>
+
+            <div class="tabs">
+                <button class="tbtab active" data-pane="lt1">General</button>
+                <button class="tbtab" data-pane="lt2">Digital agency</button>
+                <button class="tbtab" data-pane="lt3">Ad agency</button>
+                <button class="tbtab" data-pane="lt4">D2C founder</button>
+                <button class="tbtab" data-pane="lt5">Corporate</button>
+            </div>
+
+            <div class="pane active" id="lt1">
+                <div class="section-lbl">Connection note (300 char limit)</div>
+                <div class="card">
+                    <div class="card-hdr"><span class="card-label">General note</span><button class="copy-btn"
+                            data-copy="ln1">Copy</button></div>
+                    <div class="msg" id="ln1">Hi [Name], in the camera gear and production crew space in Mumbai. Work
+                        with a lot of agencies and brands on shoot days. Good to have people in the same world in the
+                        network.</div>
+                </div>
+                <div class="section-lbl">First DM (send 1 to 2 days after accept)</div>
+                <div class="card">
+                    <div class="card-hdr"><span class="card-label">General DM</span><button class="copy-btn"
+                            data-copy="ld1">Copy</button></div>
+                    <div class="msg" id="ld1">Hey [Name], thanks for connecting.
+
+                        We run Lensr. Camera gear and production crew rental in Mumbai.
+
+                        Most shoot days we work on, the team was juggling three vendors before we got involved. Gear
+                        from one place. DOP from another. Audio from a third. By the time camera rolls, someone has
+                        burned an hour they did not have.
+
+                        We fix that in one booking. Sony FX cameras, anamorphic lenses, gimbals, drone, full audio. Crew
+                        included.
+
+                        We are the official production partner for Bombay Founders Club events, shot every episode of
+                        The Founder and The Funder podcast, handled the full first season of BeerBiceps, and supply gear
+                        for BTDT Media x Snitch shoot days.
+
+                        No pitch. Just wanted to introduce Lensr properly. If a shoot comes up and you want to see what
+                        a day package looks like, drop me a message.</div>
+                </div>
+            </div>
+
+            <div class="pane" id="lt2">
+                <div class="section-lbl">Connection note</div>
+                <div class="card">
+                    <div class="card-hdr"><span class="card-label">Digital agency note</span><button class="copy-btn"
+                            data-copy="ln2">Copy</button></div>
+                    <div class="msg" id="ln2">Hi [Name], we handle camera gear and crew for agencies doing regular
+                        shoots in Mumbai. Shot BeerBiceps S1, BFC events, and BTDT x Snitch. One booking instead of
+                        three vendor calls. Good to connect.</div>
+                </div>
+                <div class="section-lbl">First DM</div>
+                <div class="card">
+                    <div class="card-hdr"><span class="card-label">Digital agency DM</span><button class="copy-btn"
+                            data-copy="ld2">Copy</button></div>
+                    <div class="msg" id="ld2">Hey [Name], thanks for connecting.
+
+                        We run Lensr. Camera gear and production crew rental in Mumbai.
+
+                        Most digital agencies deal with the same shoot-day problem. Gear from one vendor. DOP from
+                        another. Audio from a third. Someone burns half the morning on logistics before camera rolls.
+
+                        We replace all of that with one booking. Sony FX9, FX6, FX3, Cooke anamorphic lenses, gimbals,
+                        drone, full audio. DOPs and crew included. One invoice.
+
+                        We are the official production partner for Bombay Founders Club events, shot every episode of
+                        The Founder and The Funder podcast, handled the full first season of BeerBiceps, and supplied
+                        the full gear kit for BTDT Media x Snitch shoot days. Agencies that use us once do not go back
+                        to juggling vendors.
+
+                        Monthly retainer packages available for agencies with regular shoot schedules.
+
+                        No pitch. If a shoot is coming up and you want to see a day package, drop me a message.</div>
+                </div>
+            </div>
+
+            <div class="pane" id="lt3">
+                <div class="section-lbl">Connection note</div>
+                <div class="card">
+                    <div class="card-hdr"><span class="card-label">Ad agency note</span><button class="copy-btn"
+                            data-copy="ln3">Copy</button></div>
+                    <div class="msg" id="ln3">Hi [Name], we run cinema gear and crew for ad shoots in Mumbai. 24/7,
+                        short notice included. Shot BeerBiceps S1, BTDT x Snitch, and Old Monk VFX among others. Good to
+                        be in each other's network.</div>
+                </div>
+                <div class="section-lbl">First DM</div>
+                <div class="card">
+                    <div class="card-hdr"><span class="card-label">Ad agency DM</span><button class="copy-btn"
+                            data-copy="ld3">Copy</button></div>
+                    <div class="msg" id="ld3">Hey [Name], thanks for connecting.
+
+                        We run Lensr. Cinema-grade camera gear and production crew in Mumbai.
+
+                        Ad shoots have their own version of the vendor problem. Timeline compresses. DP cancels. Kit
+                        arrives wrong. And the shoot still goes because the client does not care about your production
+                        logistics.
+
+                        Most rental houses are not built for that. We are. 24/7. Short notice.
+
+                        Sony FX9, Cooke SP3 anamorphics, CMotion, gimbals, drone, full audio. DOPs and crew available.
+
+                        We are the official production partner for Bombay Founders Club events, shot every episode of
+                        The Founder and The Funder, handled the full first season of BeerBiceps, supplied the full gear
+                        kit for BTDT Media x Snitch, and are the recurring gear supplier for Old Monk VFX Studio.
+
+                        No pitch. If a production moves fast and you need gear or crew confirmed quickly, you will know
+                        who to call.</div>
+                </div>
+            </div>
+
+            <div class="pane" id="lt4">
+                <div class="section-lbl">Connection note</div>
+                <div class="card">
+                    <div class="card-hdr"><span class="card-label">D2C founder note</span><button class="copy-btn"
+                            data-copy="ln4">Copy</button></div>
+                    <div class="msg" id="ln4">Hi [Name], saw you recently raised. We handle camera gear and crew for D2C
+                        brands doing campaign shoots in Mumbai. Official production partner for BFC, shot BeerBiceps S1.
+                        One booking, everything sorted.</div>
+                </div>
+                <div class="section-lbl">First DM</div>
+                <div class="card">
+                    <div class="card-hdr"><span class="card-label">D2C founder DM</span><button class="copy-btn"
+                            data-copy="ld4">Copy</button></div>
+                    <div class="msg" id="ld4">Hey [Name], thanks for connecting.
+
+                        We run Lensr. Camera gear and production crew in Mumbai.
+
+                        Most D2C founders hit the same wall post-funding. The content budget is there. The production
+                        pipeline is not. So a shoot gets cobbled together from three different vendors and someone burns
+                        two days on logistics that should have taken one call.
+
+                        We are that one call. Sony FX cameras, anamorphic lenses, gimbals, drone, full audio. Crew
+                        included. One booking, one invoice.
+
+                        We are the official production partner for Bombay Founders Club events across Mumbai, Pune,
+                        Delhi, and Bengaluru, shot every episode of The Founder and The Funder, handled the full first
+                        season of BeerBiceps, and supply the full gear list for BTDT Media x Snitch shoot days.
+
+                        No pitch. If a product shoot or brand campaign is coming up, drop me a message and I will show
+                        you what a package looks like.</div>
+                </div>
+            </div>
+
+            <div class="pane" id="lt5">
+                <div class="section-lbl">Connection note</div>
+                <div class="card">
+                    <div class="card-hdr"><span class="card-label">Corporate marketing head note</span><button
+                            class="copy-btn" data-copy="ln5">Copy</button></div>
+                    <div class="msg" id="ln5">Hi [Name], we handle camera gear and production crew for corporate shoots
+                        in Mumbai. Ongoing work for NLEY Consultants, BFC events, and BeerBiceps S1. One vendor, no
+                        agency markup. Makes sense to connect.</div>
+                </div>
+                <div class="section-lbl">First DM</div>
+                <div class="card">
+                    <div class="card-hdr"><span class="card-label">Corporate marketing head DM</span><button
+                            class="copy-btn" data-copy="ld5">Copy</button></div>
+                    <div class="msg" id="ld5">Hey [Name], thanks for connecting.
+
+                        We run Lensr. Camera gear and production crew rental in Mumbai.
+
+                        Corporate marketing teams usually run into one of two problems on shoot days. They pay agency
+                        rates that include overhead they did not need. Or they source gear from a rental house and spend
+                        the week finding a DOP, a camera operator, and audio separately.
+
+                        Both options waste time and margin.
+
+                        Lensr is the alternative. One booking: Sony FX cameras, teleprompter with operator, gimbals,
+                        drone, full audio, crew included. One invoice. Predictable cost.
+
+                        We handle all production for Bombay Founders Club events, shot every episode of The Founder and
+                        The Funder, managed the full first season of BeerBiceps, and run ongoing production for NLEY
+                        Consultants.
+
+                        No agenda. If a brand film, product shoot, or internal video comes up, message me and I will put
+                        together a quote based on your brief.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- INSTAGRAM DM -->
+        <div class="page" id="page-insta" data-title="Instagram DM">
+            <h1>Instagram DM templates</h1>
+            <p class="page-sub">Instagram is warmer than LinkedIn but shorter in attention. The hook must land in line
+                one. Lead with their content, not your product. Three DM types: cold, warm (they follow you or engaged
+                with a post), and reply to a story.</p>
+
+            <div class="section-lbl">Cold DM — agency or brand account</div>
+            <div class="card">
+                <div class="card-hdr"><span class="card-label">Cold DM — general</span><button class="copy-btn"
+                        data-copy="ig1">Copy</button></div>
+                <div class="msg" id="ig1">Hey [Name],
+
+                    Saw your recent content. Clean output.
+
+                    Quick intro: we run Lensr, camera gear and production crew in Mumbai. Sony FX cameras, anamorphic
+                    lenses, gimbals, drone, full audio, crew if needed. One booking for the whole shoot.
+
+                    Shot BeerBiceps Season 1, BFC events across four cities, BTDT x Snitch, and more.
+
+                    If a shoot is coming up and you want to see what a day package looks like, drop a reply here.</div>
+                <div class="ann">
+                    <div class="ar"><span class="atag t-leads">Line one</span><span class="atext">Saw your recent
+                            content. Clean output. Two sentences. Acknowledges them without fake flattery. Gets you past
+                            the first read.</span></div>
+                    <div class="ar"><span class="atag t-both">Proof stack</span><span class="atext">BeerBiceps is the
+                            most recognisable proof for any creator or brand on Instagram in India. Lead with it.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-lbl">Cold DM — content creator</div>
+            <div class="card">
+                <div class="card-hdr"><span class="card-label">Creator DM</span><button class="copy-btn"
+                        data-copy="ig2">Copy</button></div>
+                <div class="msg" id="ig2">Hey [Name],
+
+                    The production quality on your recent collab was noticeably better than most creators at your level.
+                    Curious what gear you shot on.
+
+                    Either way: we run Lensr in Mumbai. Cinema cameras, anamorphic lenses, gimbal, audio. Day rental, no
+                    ownership needed.
+
+                    We shot BeerBiceps Season 1 and BTDT x Snitch among others. If a brand shoot comes up and you want
+                    cinema-quality output without buying the gear, worth a conversation.</div>
+                <div class="ann">
+                    <div class="ar"><span class="atag t-leads">Hook</span><span class="atext">Noticeably better is a
+                            compliment that invites a reply. Asking what gear they shot on opens a conversation without
+                            a pitch.</span></div>
+                    <div class="ar"><span class="atag t-offers">Ownership removed</span><span class="atext">No ownership
+                            needed removes the main objection before they raise it.</span></div>
+                </div>
+            </div>
+
+            <div class="section-lbl">Reply to their story (shoot behind the scenes)</div>
+            <div class="card">
+                <div class="card-hdr"><span class="card-label">Story reply DM</span><button class="copy-btn"
+                        data-copy="ig3">Copy</button></div>
+                <div class="msg" id="ig3">That setup looks like a busy shoot day. What camera are you running?
+
+                    We run Lensr, gear and crew rental in Mumbai. If you ever need an upgrade on kit or an extra camera
+                    body for a shoot day, that is exactly what we do. Shot BeerBiceps S1 and a few BFC events if you
+                    know those.</div>
+                <div class="ann">
+                    <div class="ar"><span class="atag t-leads">Warm entry point</span><span class="atext">Replying to a
+                            story is the warmest cold outreach on Instagram. They already know you saw their content.
+                            Start with a question, not a pitch.</span></div>
+                </div>
+            </div>
+
+            <div class="section-lbl">Instagram follow-up (no reply after 5 to 7 days)</div>
+            <div class="card">
+                <div class="card-hdr"><span class="card-label">Instagram follow-up</span><button class="copy-btn"
+                        data-copy="ig4">Copy</button></div>
+                <div class="msg" id="ig4">Hey [Name], just following up on my last message.
+
+                    If a shoot comes up and you want gear, crew, or both sorted from one place in Mumbai, that is what
+                    we do. Short notice is fine.
+
+                    Lensr | lensr.in</div>
+                <div class="ann">
+                    <div class="ar"><span class="atag t-leads">One follow-up only</span><span class="atext">On
+                            Instagram, two unanswered DMs is the limit. After this, move on. Anything more reads as
+                            desperate and damages the brand.</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- COLD CALL -->
+        <div class="page" id="page-coldcall" data-title="Cold call script">
+            <h1>Cold call script</h1>
+            <p class="page-sub">Hormozi's cold call framework: get permission to pitch, make them feel understood, ask a
+                diagnostic question, and let their answer do the selling. You are not closing on the first call. You are
+                opening a conversation.</p>
+
+            <div class="call-section">
+                <div class="call-label">Opening (first 8 seconds)</div>
+                <div class="call-block">Hey [Name], this is [Your name] from Lensr. We handle camera gear and production
+                    crew for shoots in Mumbai. Did I catch you at a bad time?
+
+                    [Wait for answer. If yes: "No problem, when is a better time to call?" If no: continue.]</div>
+            </div>
+
+            <div class="call-section">
+                <div class="call-label">Permission bridge</div>
+                <div class="call-block">Perfect. I will keep this short. We work with agencies and brands in Mumbai that
+                    are doing regular shoot days and want the gear and crew sorted from one place instead of juggling
+                    three different vendors. I wanted to see if that is something that is relevant to what you are
+                    doing.
+
+                    [Wait. Let them respond. If they say yes or maybe: continue. If they say no: ask the diagnostic
+                    question anyway.]</div>
+            </div>
+
+            <div class="call-section">
+                <div class="call-label">Diagnostic question (the Hormozi move)</div>
+                <div class="call-block">Can I ask, when you have a shoot day coming up, how are you currently handling
+                    the gear and crew side of it? Are you renting from a house, working with freelancers, or do you have
+                    something in-house?
+
+                    [Let them talk. Do not interrupt. Their answer tells you everything. Then respond to the specific
+                    gap they just described.]</div>
+            </div>
+
+            <div class="call-section">
+                <div class="call-label">If they describe the vendor juggle problem</div>
+                <div class="call-block">That is exactly what we hear from most teams. The problem is every shoot becomes
+                    a new coordination project. We solve that. One booking with Lensr covers the full kit: Sony FX
+                    cameras, lenses, gimbal, drone, audio, and crew if needed. One invoice.
+
+                    We are the official production partner for Bombay Founders Club events, shot every episode of The
+                    Founder and The Funder podcast, and handled the full first season of BeerBiceps. This is not a new
+                    problem for us.
+
+                    Do you have a shoot coming up in the next 30 days where this would actually be useful to look at?
+                </div>
+            </div>
+
+            <div class="call-section">
+                <div class="call-label">If they say "we have an in-house team"</div>
+                <div class="call-block">That is great. Most in-house teams still reach out when a shoot needs gear they
+                    do not carry, like a cinema lens set or a drone. Or when two shoots run on the same day and the team
+                    is already maxed out.
+
+                    We work with a few production houses in exactly that role. Not a replacement, just the overflow and
+                    upgrade option.
+
+                    Is there a situation like that coming up, or is the team fully covered for the next few weeks?</div>
+            </div>
+
+            <div class="call-section">
+                <div class="call-label">If they say "send me information"</div>
+                <div class="call-block">Absolutely. Before I send the rate card, can I ask one quick thing? What kind of
+                    shoots are most common for you, so I send the relevant package rather than the full list?
+
+                    [Get the answer, confirm you will send the relevant package, and follow up within the hour with a
+                    personalised email, not a generic PDF.]</div>
+            </div>
+
+            <div class="call-section">
+                <div class="call-label">Close (if conversation is warm)</div>
+                <div class="call-block">Based on what you have described, it sounds like the day shoot package would be
+                    the most relevant starting point for you. What I can do is send you a quick breakdown of what that
+                    looks like, with day rates, and we can go from there.
+
+                    Is email the best place to send it, or would WhatsApp be quicker for you?</div>
+            </div>
+
+            <div class="call-section">
+                <div class="call-label">Voicemail (if no answer)</div>
+                <div class="call-block">Hey [Name], this is [Your name] from Lensr. We handle camera gear and crew for
+                    shoots in Mumbai. If you ever need a Sony FX camera, a gimbal, or a full crew sorted on short
+                    notice, that is what we do. I will send you a quick message on WhatsApp as well. Have a good one.
+                </div>
+            </div>
+        </div>
+
+        <!-- OBJECTIONS -->
+        <div class="page" id="page-objections" data-title="Objection handling">
+            <h1>Objection handling</h1>
+            <p class="page-sub">Hormozi: never fight an objection. Acknowledge it, reframe it, and redirect. Every
+                objection is information about what the prospect actually needs to hear. The goal is not to win the
+                argument. It is to help them see the real picture. Tap any question to expand.</p>
+
+            <details class="objection-card" open>
+                <summary>
+                    <span>"Your rates are too expensive."</span>
+                    <svg class="obj-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        aria-hidden="true">
+                        <polyline points="6 9 12 15 18 9" />
+                    </svg>
+                </summary>
+                <div class="obj-a">I hear you. Can I ask what you are currently spending per shoot day when you factor
+                    in gear rental, DOP, gimbal operator, and audio separately?
+
+                    Most clients find that when they add those up, the difference is smaller than it looks. And with us,
+                    you get one confirmed invoice with no surprise add-ons on shoot day.
+
+                    If the number still does not work for your budget, tell me what the budget is and I will tell you
+                    honestly whether we can make it work or not. No point wasting each other's time.</div>
+                <div class="obj-why">Hormozi: never discount without asking a qualifying question first. Make them do
+                    the math on their current cost. The price objection usually disappears when they calculate what they
+                    are already spending.</div>
+            </details>
+
+            <details class="objection-card">
+                <summary>
+                    <span>"We already have a vendor we use."</span>
+                    <svg class="obj-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        aria-hidden="true">
+                        <polyline points="6 9 12 15 18 9" />
+                    </svg>
+                </summary>
+                <div class="obj-a">That makes sense. Can I ask, when your regular vendor is not available or a shoot
+                    needs something they do not carry, what happens then?
+
+                    We work with a lot of teams in exactly that role. Not a replacement, just the backup and upgrade
+                    option when the brief calls for it.
+
+                    What does your current vendor not carry that has come up as a gap?</div>
+                <div class="obj-why">Never attack the current vendor. Ask for the gap. There is always a gap. Their
+                    answer tells you exactly how to position Lensr.</div>
+            </details>
+
+            <details class="objection-card">
+                <summary>
+                    <span>"We do not have a shoot coming up right now."</span>
+                    <svg class="obj-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        aria-hidden="true">
+                        <polyline points="6 9 12 15 18 9" />
+                    </svg>
+                </summary>
+                <div class="obj-a">Totally fine. Most people we work with had the same answer until they had a shoot
+                    land with 48 hours notice.
+
+                    Can I just send you the rate card and kit list so you have it on file? Takes two minutes to scan,
+                    and when a brief comes in last minute you will know exactly who to call.
+
+                    What is the best email to send it to?</div>
+                <div class="obj-why">Convert the not-now into a warm future contact. Get the email. The rate card in
+                    their inbox is a low-friction conversion that pays off when timing changes.</div>
+            </details>
+
+            <details class="objection-card">
+                <summary>
+                    <span>"We have an in-house team."</span>
+                    <svg class="obj-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        aria-hidden="true">
+                        <polyline points="6 9 12 15 18 9" />
+                    </svg>
+                </summary>
+                <div class="obj-a">That is great. In-house teams are the best setup for regular shoots.
+
+                    Two situations where most in-house teams still reach out to us: when a brief needs gear they do not
+                    own, like a drone or a cinema prime set, and when two shoots run on the same day and capacity gets
+                    stretched.
+
+                    Is either of those something that has come up for your team?</div>
+                <div class="obj-why">Validate, then plant two specific scenarios where even in-house teams need Lensr.
+                    The question at the end gets them to confirm whether the gap exists.</div>
+            </details>
+
+            <details class="objection-card">
+                <summary>
+                    <span>"Send me your rate card and I will have a look."</span>
+                    <svg class="obj-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        aria-hidden="true">
+                        <polyline points="6 9 12 15 18 9" />
+                    </svg>
+                </summary>
+                <div class="obj-a">Absolutely. Before I do, can I ask one quick thing so I send the relevant package
+                    rather than the full list? What kind of shoots are most common for you, and roughly how often?
+
+                    [After they answer: "Great. I will send you the package that fits that brief rather than the whole
+                    menu. You will get exactly what is relevant and nothing you are not."</div>
+                <div class="obj-why">Hormozi: never send a generic PDF when you can send a personalised one. Asking this
+                    question also re-engages them in the conversation and qualifies their budget and frequency before
+                    you send anything.</div>
+            </details>
+
+            <details class="objection-card">
+                <summary>
+                    <span>"Can you do it cheaper?"</span>
+                    <svg class="obj-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        aria-hidden="true">
+                        <polyline points="6 9 12 15 18 9" />
+                    </svg>
+                </summary>
+                <div class="obj-a">Tell me what budget you are working with and I will tell you honestly what we can do
+                    within it.
+
+                    If the budget is below what our gear and crew costs to put together, I will say so. There is no
+                    point quoting you something that does not match what you have.
+
+                    What is the number you are working with?</div>
+                <div class="obj-why">Hormozi: always ask for the number before you move the price. Most people asking
+                    for cheaper do not actually know what cheaper means. Making them name the number either reveals a
+                    workable budget or ends the conversation cleanly.</div>
+            </details>
+
+            <details class="objection-card">
+                <summary>
+                    <span>"I need to check with my team / boss."</span>
+                    <svg class="obj-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        aria-hidden="true">
+                        <polyline points="6 9 12 15 18 9" />
+                    </svg>
+                </summary>
+                <div class="obj-a">Of course. What does your team typically need to see to make a call on something like
+                    this? A quote, a portfolio, references?
+
+                    I want to make sure whatever I send you is useful for that conversation and not just more stuff for
+                    them to read.
+
+                    And who else is involved in the decision? Is it worth looping them in directly so I can answer their
+                    questions?</div>
+                <div class="obj-why">Do not wait passively. Find out what the decision process looks like and offer to
+                    be useful inside it. Asking who else is involved prevents the deal from dying in an inbox you cannot
+                    reach.</div>
+            </details>
+        </div>
+
+        <!-- NEGOTIATION -->
+        <div class="page" id="page-nego" data-title="Negotiation tactics">
+            <h1>Negotiation tactics</h1>
+            <p class="page-sub">Hormozi: never negotiate against yourself. The person who names the number first often
+                loses. These tactics are built on the principle that confidence in price signals confidence in value.
+                Discounting without reason destroys perceived quality.</p>
+
+            <div class="nego-step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                    <div class="step-title">Never drop the price without getting something in return</div>
+                    <div class="step-body">If someone asks for a lower rate, the answer is never just yes. You give
+                        something, you take something. Hormozi: value is relative. If you lower the price without a
+                        trade, you tell them the original price was made up.</div>
+                    <div class="step-script">"I can look at adjusting the rate. If we do two shoot days instead of one,
+                        I can give you a better per-day number. Does that work for the upcoming schedule?"
+
+                        OR: "If you can commit to a monthly retainer rather than per shoot, I can bring the per-day rate
+                        down. What does your shoot frequency look like over the next three months?"</div>
+                </div>
+            </div>
+
+            <div class="nego-step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                    <div class="step-title">Use silence after you quote</div>
+                    <div class="step-body">After you give a price, stop talking. Most people fill silence by justifying
+                        their price, which signals insecurity. Let the number sit. If they have an objection, they will
+                        say it. If they are calculating, let them calculate.</div>
+                    <div class="step-script">[Quote the number. Stop. Look at them or wait on the call. Do not speak
+                        until they do.]</div>
+                </div>
+            </div>
+
+            <div class="nego-step">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                    <div class="step-title">Anchor high, give one concession</div>
+                    <div class="step-body">If you expect to negotiate, start with the full package. When they push back,
+                        offer one specific concession: a different package configuration, not a straight discount. This
+                        preserves the value of the package while giving them something to feel like they won.</div>
+                    <div class="step-script">"The full day package at that rate includes crew. If budget is the
+                        constraint, we can do dry hire only for the camera and lenses, and you sort the operator
+                        separately. That brings the number down to [dry hire rate]. Which would work better for this
+                        shoot?"</div>
+                </div>
+            </div>
+
+            <div class="nego-step">
+                <div class="step-num">4</div>
+                <div class="step-content">
+                    <div class="step-title">The retainer close (turn a one-off into a relationship)</div>
+                    <div class="step-body">When someone is negotiating on a single shoot day, offer the retainer as the
+                        answer. The per-day rate drops, they feel like they won. Lensr gets recurring revenue. Both
+                        sides win.</div>
+                    <div class="step-script">"The per-shoot rate is what it is for a single booking. But if you are
+                        shooting more than twice a month, a retainer brings the per-day number down significantly and
+                        also guarantees your availability. Do you want me to put together what that looks like for your
+                        typical shoot frequency?"</div>
+                </div>
+            </div>
+
+            <div class="nego-step">
+                <div class="step-num">5</div>
+                <div class="step-content">
+                    <div class="step-title">Counter the "we got a cheaper quote" move</div>
+                    <div class="step-body">Someone will say another vendor quoted them less. The worst response is to
+                        match it. The right response is to make them think about what they are actually comparing.</div>
+                    <div class="step-script">"I believe you. Can I ask what was in that quote? Was it dry hire only, or
+                        did it include crew? And which camera bodies and lenses?
+
+                        Most quotes that come in lower are missing something: crew, a specific lens, or 24/7
+                        availability. I want to make sure you are comparing the same thing before you make the call.
+                        What did the quote include exactly?"</div>
+                </div>
+            </div>
+
+            <div class="nego-step">
+                <div class="step-num">6</div>
+                <div class="step-content">
+                    <div class="step-title">The take-away close (use sparingly)</div>
+                    <div class="step-body">Hormozi: when someone is going back and forth but not deciding, introduce
+                        mild scarcity. Not fake scarcity. Real scarcity about your availability or a specific piece of
+                        kit.</div>
+                    <div class="step-script">"I want to flag that we have two other shoots that week that have already
+                        come in. The FX9 and the Cooke lens set are the most requested. If the date is important to you,
+                        I would need to confirm this booking today to hold the kit. Otherwise I cannot guarantee
+                        availability."</div>
+                </div>
+            </div>
+
+            <div class="nego-step">
+                <div class="step-num">7</div>
+                <div class="step-content">
+                    <div class="step-title">Know your walk-away number</div>
+                    <div class="step-body">Before every negotiation, know the minimum you will accept and why. If
+                        someone pushes below that, the answer is no. A bad client at a low rate is worse than no client.
+                        Hormozi: say no with confidence and it will come back to yes more often than you think.</div>
+                    <div class="step-script">"I appreciate you being direct about the budget. At that rate I cannot put
+                        together the package that will actually serve your shoot properly. I would rather not take the
+                        booking and have the shoot go badly than take it and have you unhappy with the output. If the
+                        budget changes, we are here."</div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <button class="fab" id="fabTop" aria-label="Scroll to top">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="18 15 12 9 6 15" />
+        </svg>
+    </button>
+
+    <div class="toast" id="toast">Copied</div>
+
+    <script>
+        (function () {
+            const $ = (sel, root) => (root || document).querySelector(sel);
+            const $$ = (sel, root) => Array.from((root || document).querySelectorAll(sel));
+            const body = document.body;
+
+            const navItems = $$('.nav-item');
+            const pages = $$('.page');
+            const topbarCurrent = $('#topbarCurrent');
+
+            function showPage(id, push) {
+                const page = document.getElementById('page-' + id);
+                if (!page) return;
+                pages.forEach(p => p.classList.remove('active'));
+                page.classList.add('active');
+                navItems.forEach(n => n.classList.toggle('active', n.dataset.page === id));
+                if (topbarCurrent) topbarCurrent.textContent = page.dataset.title || '';
+                if (push && location.hash !== '#' + id) {
+                    history.replaceState(null, '', '#' + id);
+                }
+                window.scrollTo({ top: 0, behavior: 'auto' });
+                closeNav();
+            }
+
+            navItems.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showPage(item.dataset.page, true);
+                });
+            });
+
+            const initial = (location.hash || '#offer').replace('#', '');
+            if (document.getElementById('page-' + initial)) showPage(initial, false);
+
+            window.addEventListener('hashchange', () => {
+                const id = (location.hash || '#offer').replace('#', '');
+                if (document.getElementById('page-' + id)) showPage(id, false);
+            });
+
+            $$('.tbtab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const parent = tab.closest('.page');
+                    const paneId = tab.dataset.pane;
+                    $$('.tbtab', parent).forEach(t => t.classList.remove('active'));
+                    $$('.pane', parent).forEach(p => p.classList.remove('active'));
+                    tab.classList.add('active');
+                    const pane = document.getElementById(paneId);
+                    if (pane) pane.classList.add('active');
+                    tab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                });
+            });
+
+            const toast = $('#toast');
+            let toastTimer;
+            function showToast(msg) {
+                toast.textContent = msg;
+                toast.classList.add('show');
+                clearTimeout(toastTimer);
+                toastTimer = setTimeout(() => toast.classList.remove('show'), 1600);
+            }
+
+            $$('.copy-btn').forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    const id = btn.dataset.copy;
+                    const el = document.getElementById(id);
+                    if (!el) return;
+                    const text = el.innerText;
+                    const original = btn.textContent;
+                    try {
+                        await navigator.clipboard.writeText(text);
+                    } catch {
+                        const ta = document.createElement('textarea');
+                        ta.value = text;
+                        ta.style.position = 'fixed';
+                        ta.style.opacity = '0';
+                        document.body.appendChild(ta);
+                        ta.select();
+                        try { document.execCommand('copy'); } catch { }
+                        document.body.removeChild(ta);
+                    }
+                    btn.classList.add('copied');
+                    btn.textContent = 'Copied';
+                    showToast('Copied to clipboard');
+                    setTimeout(() => {
+                        btn.classList.remove('copied');
+                        btn.textContent = original;
+                    }, 1500);
+                });
+            });
+
+            const hamburger = $('#hamburger');
+            const overlay = $('#navOverlay');
+
+            function openNav() {
+                body.classList.add('nav-open', 'no-scroll');
+                hamburger.setAttribute('aria-expanded', 'true');
+            }
+            function closeNav() {
+                body.classList.remove('nav-open', 'no-scroll');
+                hamburger.setAttribute('aria-expanded', 'false');
+            }
+            function toggleNav() {
+                if (body.classList.contains('nav-open')) closeNav(); else openNav();
+            }
+
+            hamburger.addEventListener('click', toggleNav);
+            overlay.addEventListener('click', closeNav);
+
+            let resizeTimer;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(() => {
+                    if (window.innerWidth > 720) closeNav();
+                }, 100);
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') closeNav();
+            });
+
+            const searchInput = $('#searchInput');
+            const searchClear = $('#searchClear');
+
+            const searchIndex = navItems.map(item => {
+                const id = item.dataset.page;
+                const page = document.getElementById('page-' + id);
+                const text = page ? page.innerText.toLowerCase() : '';
+                const title = (page && page.dataset.title) || item.textContent.trim();
+                return { id, item, text, title };
+            });
+
+            function runSearch(q) {
+                q = q.trim().toLowerCase();
+                if (!q) {
+                    navItems.forEach(n => n.classList.remove('hidden'));
+                    $$('.nav-section').forEach(s => s.classList.remove('hidden'));
+                    body.classList.remove('search-empty');
+                    return;
+                }
+                let any = false;
+                searchIndex.forEach(entry => {
+                    const match = entry.text.includes(q) || entry.title.toLowerCase().includes(q);
+                    entry.item.classList.toggle('hidden', !match);
+                    if (match) any = true;
+                });
+                $$('.nav-section').forEach(section => {
+                    let next = section.nextElementSibling;
+                    let anyVisible = false;
+                    while (next && next.classList.contains('nav-item')) {
+                        if (!next.classList.contains('hidden')) { anyVisible = true; break; }
+                        next = next.nextElementSibling;
+                    }
+                    section.classList.toggle('hidden', !anyVisible);
+                });
+                body.classList.toggle('search-empty', !any);
+            }
+
+            searchInput.addEventListener('input', (e) => runSearch(e.target.value));
+            searchClear.addEventListener('click', () => {
+                searchInput.value = '';
+                runSearch('');
+                searchInput.focus();
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+                    e.preventDefault();
+                    searchInput.focus();
+                    if (window.innerWidth <= 720 && !body.classList.contains('nav-open')) openNav();
+                }
+            });
+
+            const fab = $('#fabTop');
+            let scrollTimer;
+            window.addEventListener('scroll', () => {
+                if (scrollTimer) return;
+                scrollTimer = requestAnimationFrame(() => {
+                    fab.classList.toggle('show', window.scrollY > 400);
+                    scrollTimer = null;
+                });
+            }, { passive: true });
+            fab.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+            const sidebar = $('#sidebar');
+            let touchStartX = 0, touchCurrentX = 0, touching = false;
+            sidebar.addEventListener('touchstart', (e) => {
+                if (!body.classList.contains('nav-open')) return;
+                touchStartX = e.touches[0].clientX;
+                touching = true;
+            }, { passive: true });
+            sidebar.addEventListener('touchmove', (e) => {
+                if (!touching) return;
+                touchCurrentX = e.touches[0].clientX;
+            }, { passive: true });
+            sidebar.addEventListener('touchend', () => {
+                if (!touching) return;
+                if (touchStartX - touchCurrentX > 60) closeNav();
+                touching = false;
+            });
+        })();
+    </script>
+</body>
+
+</html>
